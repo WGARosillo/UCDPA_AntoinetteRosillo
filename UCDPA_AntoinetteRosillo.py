@@ -17,10 +17,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Invistico Airline is the alias of the airline company that I am investigating. This dataset consists of the
-# details of the customers who have already flown with them aims to predict and their feedback on the various
-# services and facilities it provides. It aims to predict whether a future customer would be satisfied relative
-# to the variety of services the airline provides.This dataset also aims to identify which aspect of their
-# service should be prioritized to generate more satisfied customers.##
+# details of the customers who have already flown with them. I aim to predict whether a future customer
+# would be satisfied with their airline. I did this  by analysing the choices of those customers,
+# whether they were satisfied or dissatisfied with the variety of services the airline provides.
+# I aim to identify which aspect of their services should be prioritized to
+# generate more satisfied customers, using machine learning methods.#
 
 data = pd.read_csv('Invistico_Airline.csv')
 print(data)
@@ -32,14 +33,14 @@ print(data.shape)
 # The data displays 5 string types and the rest of the data are numerical types.
 data.info()
 
-# This used to identify if any of the columns contain missing values. In this case, its the column for
-# "Arrival Delay in Minutes" with 393 missing values. Since this does not amount to half of the code, I used the mean
-# value you to replace each missing value within the column.
 data.isnull().sum()
+# This used to identify if any of the columns contain missing values.
 
 data['Arrival Delay in Minutes'].describe()
 
 data['Arrival Delay in Minutes']=data['Arrival Delay in Minutes'].fillna(data['Arrival Delay in Minutes'].mean())
+# In this case, its the column for "Arrival Delay in Minutes" with 393 missing values.
+# Since this does not amount to half of the code, I used the mean value to replace each missing value within the column.
 
 data.isnull().sum()
 print(data.shape)
@@ -124,7 +125,7 @@ for i in range(22):
         sns.despine()
         plt.suptitle('Total Satisfaction', fontsize=20)
         plt.tight_layout()
-        fig.savefig('TotalSatisfaction.png')
+
 
 print(data.corr())
 
@@ -136,7 +137,6 @@ dataplot=sns.heatmap(data[num_list].corr(), annot = True, linewidths= 0.3 , fmt=
 dataplot.set_xticklabels(dataplot.get_xticklabels(),rotation= 40, ha = "right")
 plt.title('Heatmap of the Correlation between Columns')
 plt.show()
-fig.savefig('heatmap.png')
 
 # due to the correlation values being low with reference to their relationship observed with the satisfaction
 # column, the flight distance, Departure/Arrival tim convenient, Gate location, departure Delay in Minutes and Arrival Delay in Minutes columns will be dropped.
@@ -328,6 +328,7 @@ plt.figure(figsize = (10,50))
 rf=sns.barplot(x="Importance",y="Features",data = Feat_Imp)
 plt.ylabel('Features')
 plt.xlabel('Importance')
+plt.title('Random Forest: Importance of all Features',size=10)
 plt.tight_layout()
 plt.show()
 
@@ -394,7 +395,7 @@ dt_cm = confusion_matrix(data_y_test,predictions)
 print(dt_cm)
 
 plt.figure(figsize=(5,5))
-sns.heatmap(dt_cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Greens_r')
+sns.heatmap(dt_cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Greens_r', xticklabels=['Dissatisfied', 'Satisfied'],yticklabels=['Dissatisfied', 'Satisfied'])
 plt.ylabel('Actual label')
 plt.xlabel('Predicted label')
 all_sample_title = 'Decision Tree Confusion Matrix'
@@ -453,6 +454,8 @@ loca = sns.barplot(x="Importance",y="Features",data = Feature_Imp)
 sns.barplot(x="Importance", y="Features", data=Feature_Imp)
 plt.ylabel('Features')
 plt.xlabel('Importance')
+plt.title('Decision Tree: Importance of all Features',size=10)
+plt.tight_layout()
 plt.show()
 
 # Hyperparameter Tuning a Decision Tree to obtain an optimal model structure resulting in the best model performance.
@@ -538,7 +541,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import cross_val_score
 
 data_x_train,data_x_test,data_y_train,data_y_test=train_test_split(data_x,data_y,test_size=0.2,random_state=1)
-dtr_cv=DecisionTreeRegressor(max_depth=20,min_samples_split=5,min_samples_leaf=1,random_state=1)
+dtr_cv=DecisionTreeRegressor(max_depth=15,min_samples_split=7,min_samples_leaf=1,random_state=1)
 dtr_cv.fit(data_x_train,data_y_train)
 predict_dtr_train=dtr_cv.predict(data_x_train)
 predict_dtr_test=dtr_cv.predict(data_x_test)
