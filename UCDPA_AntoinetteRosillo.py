@@ -607,3 +607,7 @@ print(df2)
 coffee = pd.merge(df1,df2,on="coffee")
 # Inner join by default
 print(coffee)
+
+import re
+dtr_value= re.findall(r'\d+','RMSE of Decision Tree Regressor = 0.13')
+print(dtr_value)
